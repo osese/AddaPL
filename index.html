@@ -1,0 +1,127 @@
+<html>
+<head>
+<script text="type/javascript" src="ast.js"> </script>
+<script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+<script language="javascript" type="text/javascript" src="libraries/p5.sound.js"></script>
+<script text="type/javascript" src="graphics.js"> </script>
+<script src="./jison_gramer/gramer.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="./ucbirim/shell.js"> </script>
+
+<style>
+#main{
+	width: 100%;
+	height: 90%;
+}
+#main-left{ 	
+	float:left;
+	width: 15em;
+	display: block;
+	height: 50em;
+}
+#main-right{
+	width: 10%;
+	float: right;
+}
+
+#main-inner{
+	margin: 0;
+	padding: 0.2em;
+	width: 100%;
+}
+
+.pis {
+	margin: 0;
+	padding: 0;
+	white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#shell{
+	font-family: inherit;
+	font-size: inherit;
+	border: none;
+	outline: none;
+	width: 80%;
+	resize: none;
+}
+
+#shell-left{
+	font-family: inherit;
+	font-size: inherit;
+	border: none;
+	outline: none;
+	width: 1.5em;
+	resize: none;
+}
+
+#shell-holder{
+	border: 1px solid black;
+	font-family: monospace;
+	margin-top: 0;
+	padding: 1px;
+	font-size: 20;
+	float: left;
+	width: 1196px;
+	
+}
+
+#shell-inner{
+	width: 100%;
+	background: white;
+}
+#canvas-holder{
+	width: 90%;
+	margin: 0;
+}
+
+#hist{
+	height: 5em;
+	overflow-y: auto;
+	list-style-type: none;
+	margin:0px;
+	padding:0px;
+	background: #ccc ;
+	box-shadow: inset 0 0 3px;
+}
+
+#buttons{
+	flex: 1px;
+}
+
+</style>
+</head>
+<body>
+
+
+
+<div id="main" style="border: 1px solid black"> 
+	<div id="main-left">
+	</div>
+	
+	<div id="main-inner"> 
+		<div id="canvas-holder">
+		</div>
+		<div id="shell-holder">   
+			<ul id="hist"> 
+				<li id="hist-last"> </li>
+			</ul>
+			<div id="shell-inner">
+				<textarea id="shell-left" readonly rows="1">-></textarea>
+				<textarea id="shell" rows="1"></textarea>
+			</div>
+		</div>
+	</div>
+	<div id="main-right">
+	</div>
+	
+</div>
+	
+
+</body>
+	<script> 
+		var term_ = new Terminal();
+	</script> 
+</html>
+
+
