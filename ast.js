@@ -9,7 +9,7 @@ let komut_tipi = {
 	KB: 5,
 	ET: 6,
 	HATIRLA: 7,
-	KAYDET: 8
+	KAYDET: 8,
 };
 
 class Komut{

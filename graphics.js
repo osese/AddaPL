@@ -104,7 +104,7 @@ var Kurbaga = {
 			obj.color = Kurbaga.pencolor;
 			drawables.push(obj);	// push object into array
 		}
-		Kurbaga.arrow.forward();		// Update the arrow 
+		 
 	},
 	setpos: function(x, y){
 		Kurbaga.pos.x = x ;
@@ -112,44 +112,100 @@ var Kurbaga = {
 	},
 	safeforward: function(dX){
 		let dX_vector = muls2D(Kurbaga.dir, dX);
-		let old_pos = Kurbaga.pos 
+		let old_pos = new Point2D(Kurbaga.pos.x, Kurbaga.pos.y);
 		let new_pos = add2D(Kurbaga.pos, dX_vector)
 		
 		let fx = linEqGen("X", new_pos.x, new_pos.y, old_pos.x, old_pos.y)
 		let fy = linEqGen("Y", new_pos.x, new_pos.y, old_pos.x, old_pos.y)
 		
+
+		
+		absDx = Math.abs(dX);
+		dxDir = absDx/dX ;
 		if(new_pos.x > W){
-			drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
+			if(new_pos.y > H){// down-right 
+				if(fx(W) > H ){			// down first 
+					drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
+							new Point2D(fy(H), H)));
+					Kurbaga.setpos(fy(H), 0);
+					return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, fy(H), H)));
+					
+				}else{					// right first 
+					drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
 							new Point2D(W, fx(W))));
-			let left_x = old_pos.x + dX_vector.x - W
-			drawables.push(new Drawable(drawable_type.line, new Point2D(0, fx(0)), 
-							new Point2D(left_x, fx(left_x))));
-			Kurbaga.setpos(left_x, fx(left_x));
-		}else if(new_pos.y > H){
+					Kurbaga.setpos(0, fx(W));
+					return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, W, fx(W))));
+				}
+			}else if(new_pos.y < 0){ // top-right 
+				if(fx(W) < 0){			// top first 
+					drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
+								new Point2D(fy(0), 0)));
+					Kurbaga.setpos(fy(0), H);
+					return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, fy(0), 0)));		
+				}else{					// right first 
+					drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
+							new Point2D(W, fx(W))));
+					
+					Kurbaga.setpos(0, fx(W));
+					return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, W, fx(W))));			
+				}
+			}else{// just right 
+				drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
+							new Point2D(W, fx(W))));
+						
+				Kurbaga.setpos(0, fx(W));
+				return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, W, fx(W))));			
+			}
+		}
+		else if(new_pos.x < 0){
+			if(new_pos.y > H){// down-left 
+				if(fx(0) > H){ // down first 
+							// down first 
+					drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
+							new Point2D(fy(H), H)));
+					Kurbaga.setpos(fy(H), 0);
+					return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, fy(H), H)));
+				}else{//left first 
+					drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
+							new Point2D(0, fx(0))));
+					Kurbaga.setpos(W, fx(0));
+					return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, 0, fx(0))));
+				}
+			}else if(new_pos.y < 0){ // top-left 
+				if(fx(0) < 0){ // top-first 
+					drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 		
+								new Point2D(fy(0), 0)));
+					Kurbaga.setpos(fy(0), H);
+					return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, fy(0), 0)));		
+				}else {//left-first 
+					drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
+							new Point2D(0, fx(0))));
+					Kurbaga.setpos(W, fx(0));
+					return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, 0, fx(0))));
+				}
+			}else{//just left 
+				drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
+							new Point2D(0, fx(0))));
+					Kurbaga.setpos(W, fx(0));
+					return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, 0, fx(0))));
+			}
+		}
+		else if(new_pos.y > H){	// just down 
 			drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
 							new Point2D(fy(H), H)));
-			let left_x = old_pos.y + dX_vector.y - H
-			drawables.push(new Drawable(drawable_type.line, new Point2D(fy(0), 0), 
-							new Point2D(fy(left_x), left_x)));
-			Kurbaga.setpos(fy(left_x), left_x);
-		}else if(new_pos.x < 0){
-			drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
-							new Point2D(0, fx(0))));
-			let left_x = old_pos.x + dX_vector.x + W 
-			drawables.push(new Drawable(drawable_type.line, new Point2D(W, fx(W)), 
-							new Point2D(left_x, fx(left_x))));
-			Kurbaga.setpos(left_x, fx(left_x));
-		}else if(new_pos.y < 0){
-			drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 
-							new Point2D(fy(0), 0)));
-			let left_x = old_pos.y + dX_vector.y + H
-			drawables.push(new Drawable(drawable_type.line, new Point2D(fy(H), H), 
-							new Point2D(fy(left_x), left_x)));
-			Kurbaga.setpos(fy(left_x), left_x);
-		} 
-		else{
+					Kurbaga.setpos(fy(H), 0);
+					return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, fy(H), H)));
+			
+		}else if(new_pos.y < 0){	// just top 
+			drawables.push(new Drawable(drawable_type.line, new Point2D(old_pos.x, old_pos.y), 		
+								new Point2D(fy(0), 0)));
+			Kurbaga.setpos(fy(0), H);
+			return Kurbaga.safeforward(dxDir*(absDx - distance2D(old_pos.x, old_pos.y, fy(0), 0)));		
+		}else{
 			Kurbaga.forward(dX_vector);	
 		}
+		
+	
 	},
 	
 	pendown: function(){
@@ -171,6 +227,8 @@ var Kurbaga = {
 	},
 	reset: function(){
 		Kurbaga.setpos(W/2, H/2);
+		Kurbaga.dir.x = 0;
+		Kurbaga.dir.y = 1;
 		Kurbaga.arrow.init();
 	}
 };
@@ -218,6 +276,10 @@ function Point2D(x,y){
 function distance2d(p1 , p2){
 	return Math.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2);
 }
+function distance2D(x1 , y1, x2, y2){
+	return Math.sqrt((x1-x2)**2 + (y1 - y2)**2);
+}
+
 function muls2D(p1, s){
 	// scalar times vector 
 	return new Point2D(p1.x * s, p1.y*s);
@@ -249,6 +311,7 @@ rotate: function(x){
 forward: function(x){	
 // Go forward respect to turtle 
 	Kurbaga.safeforward(-x);
+	Kurbaga.arrow.forward();		// Update the arrow
 },
 
 pendown: function(){
