@@ -97,6 +97,36 @@
 
 <div id="main" style="border: 1px solid black"> 
 	<div id="main-left">
+		<div id="aciklamalar">
+			<code>
+			program	    : komut EOF	  { interp($1); console.log($1); }
+						; 
+
+			komut	    : TEKRAR e  '[' komutlar ']'  {$$ = new Komut(komut_tipi.TEKRAR, $2, $4); }
+						| DONDUR e 					  {$$ = new Komut(komut_tipi.DONDUR, $2, 0); }
+						| KAYDET  e ':' ID 			  {$$ = new Komut(komut_tipi.KAYDET, $2, new Exp_Id($4)); }
+						| ILERI e 					  {$$ = new Komut(komut_tipi.ILERI, $2, 0); }
+						| KA 						  {$$ = new Komut(komut_tipi.KA, 0, 0); }
+						| KB  						  {$$ = new Komut(komut_tipi.KB, 0, 0); }
+						| ET						  {$$ = new Komut(komut_tipi.ET, 0, 0); }
+						; 
+						
+			komutlar 	: komut komutlar			  {$$ = new Komutlar($1, $2); }
+						| komut 					  {$$ = $1;}
+						; 
+						
+			e
+				: e '+' e							  {$$ = new Exp_Op($1, exp_ops.PLUS, $3); } 
+				| e '-' e							  {$$ = new Exp_Op($1, exp_ops.MINUS, $3); } 
+				| e '*' e							  {$$ = new Exp_Op($1, exp_ops.TIME, $3); } 
+				| e '/' e							  {$$ = new Exp_Op($1, exp_ops.DIV, $3); } 
+				| '(' e ')'							  {$$ = $2; }
+				| '-' e %prec UMINUS				  {$$ = new Exp_Op($2, exp_ops.UMINUS, 0); }
+				| NUM							  	  {$$ = new Exp_Num(parseFloat($1)); }
+				| HATIRLA ID						  {$$ = new Exp_Id($2);  } 
+				;
+			</code>
+		</div>
 	</div>
 	
 	<div id="main-inner"> 
@@ -114,7 +144,6 @@
 	</div>
 	<div id="main-right">
 	</div>
-	
 </div>
 	
 
