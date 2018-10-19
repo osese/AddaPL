@@ -1,151 +1,89 @@
 <html>
 <head>
-<script text="type/javascript" src="ast.js"> </script>
-<script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
-<script language="javascript" type="text/javascript" src="libraries/p5.sound.js"></script>
-<script text="type/javascript" src="graphics.js"> </script>
-<script src="./jison_gramer/gramer.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="./ucbirim/shell.js"> </script>
+<link rel="stylesheet" href="src/css/style.css"/>
 
-<style>
-#main{
-	width: 100%;
-	height: 90%;
-}
-#main-left{ 	
-	float:left;
-	width: 15em;
-	display: block;
-	height: 50em;
-}
-#main-right{
-	width: 10%;
-	float: right;
-}
+<script src="src/gramer/gramer.js"></script>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="src/js/term.js"> </script>
+<script src="src/js/graphics.js"> </script>
+<script src="src/js/ast.js"> </script>
 
-#main-inner{
-	margin: 0;
-	padding: 0.2em;
-	width: 100%;
-}
+<!--
+<script src="node_modules/lib/p5/p5.min.js"></script>
+<script src="node_modules/lib/p5/addons/p5.sound.min.js"></script>
+ -->
+<script src="node_modules/p5/lib/p5.js"></script>
+<script src="node_modules/p5/lib/addons/p5.sound.js"></script>
+<!-- /P5.js -->
 
-.pis {
-	margin: 0;
-	padding: 0;
-	white-space: pre-wrap;
-    word-wrap: break-word;
-}
-
-#shell{
-	font-family: inherit;
-	font-size: inherit;
-	border: none;
-	outline: none;
-	width: 80%;
-	resize: none;
-}
-
-#shell-left{
-	font-family: inherit;
-	font-size: inherit;
-	border: none;
-	outline: none;
-	width: 1.5em;
-	resize: none;
-}
-
-#shell-holder{
-	border: 1px solid black;
-	font-family: monospace;
-	margin-top: 0;
-	padding: 1px;
-	font-size: 20;
-	float: left;
-	width: 1196px;
-	
-}
-
-#shell-inner{
-	width: 100%;
-	background: white;
-}
-#canvas-holder{
-	width: 90%;
-	margin: 0;
-}
-
-#hist{
-	height: 5em;
-	overflow-y: auto;
-	list-style-type: none;
-	margin:0px;
-	padding:0px;
-	background: #ccc ;
-	box-shadow: inset 0 0 3px;
-}
-
-#buttons{
-	flex: 1px;
-}
-
-</style>
 </head>
 <body>
 
-
-
-<div id="main" style="border: 1px solid black"> 
-	<div id="main-left">
-		<div id="aciklamalar">
-			<code>
-			program	    : komut EOF	  { interp($1); console.log($1); }
-						; 
-
-			komut	    : TEKRAR e  '[' komutlar ']'  {$$ = new Komut(komut_tipi.TEKRAR, $2, $4); }
-						| DONDUR e 					  {$$ = new Komut(komut_tipi.DONDUR, $2, 0); }
-						| KAYDET  e ':' ID 			  {$$ = new Komut(komut_tipi.KAYDET, $2, new Exp_Id($4)); }
-						| ILERI e 					  {$$ = new Komut(komut_tipi.ILERI, $2, 0); }
-						| KA 						  {$$ = new Komut(komut_tipi.KA, 0, 0); }
-						| KB  						  {$$ = new Komut(komut_tipi.KB, 0, 0); }
-						| ET						  {$$ = new Komut(komut_tipi.ET, 0, 0); }
-						; 
-						
-			komutlar 	: komut komutlar			  {$$ = new Komutlar($1, $2); }
-						| komut 					  {$$ = $1;}
-						; 
-						
-			e
-				: e '+' e							  {$$ = new Exp_Op($1, exp_ops.PLUS, $3); } 
-				| e '-' e							  {$$ = new Exp_Op($1, exp_ops.MINUS, $3); } 
-				| e '*' e							  {$$ = new Exp_Op($1, exp_ops.TIME, $3); } 
-				| e '/' e							  {$$ = new Exp_Op($1, exp_ops.DIV, $3); } 
-				| '(' e ')'							  {$$ = $2; }
-				| '-' e %prec UMINUS				  {$$ = new Exp_Op($2, exp_ops.UMINUS, 0); }
-				| NUM							  	  {$$ = new Exp_Num(parseFloat($1)); }
-				| HATIRLA ID						  {$$ = new Exp_Id($2);  } 
-				;
-			</code>
+<div id="main"> 
+	<div id="main-inner" class="block"> 
+		<div id="canvas-holder" >
 		</div>
-	</div>
-	
-	<div id="main-inner"> 
-		<div id="canvas-holder">
-		</div>
-		<div id="shell-holder">   
-			<ul id="hist"> 
-				<li id="hist-last"> </li>
-			</ul>
-			<div id="shell-inner">
-				<textarea id="shell-left" readonly rows="1">-></textarea>
-				<textarea id="shell" rows="1"></textarea>
+		<div id="term-holder">
+			
+			<div id="term-inner">
+				<textarea id="term" rows="1" class="block"></textarea>
+				<button class="block" id="calistirbtn">></button> 
+				<button class="block" id="temizlebtn">X</button> 
+			</div>   
+			<div id="term-right">
+				
 			</div>
 		</div>
+		<div id="output">
+			<ul id="output-list">
+				
+			</ul>
+		</div>
 	</div>
-	<div id="main-right">
+	<div id="main-right" class="block">
+		<div id="history">
+			<ul id="hist"> 
+			</ul>
+		</div>
+		<div id="variable">
+			<ul id="variable-list">
+				
+			</ul>
+		</div>
+	</div>
+	<div id="main-right-2" class="block">
+		<div >
+				<h2>Komutlar </h2>
+				<ul>
+				<li><code>et</code> ya da <code>ekranıtemizle</code> : ekranı temizler</li>
+				<li><code>ka</code>, <code>kalemal</code> : kalemi alır </li>
+				<li><code>kb</code>, <code>kalembırak</code> : kalemi bırakır </li>
+				<li><code>yazdir &lt;ifade&gt;</code> : ifadeyi yazdırır</li>
+				<li><code>kaydet &lt;değişken&gt; <span style='font-family:"Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif'>-</span>&gt; &lt;ifade&gt;</code> : ifadeyi değişkene atar. </li>
+				<li><code>dön &lt;ifade&gt;</code> : saat yönünde ifade kadar derece döner. </li>
+				<li><code>ileri &lt;ifade&gt;</code>: ileriye doğru ifade kadar px gider.</li>
+				<li><code>tekrarla &lt;ifade&gt; &#39;[&#39; &lt;komutlar&gt; &#39;]&#39;</code> : komutları ifade kadar tekrarlar. </li>
+				<li><code>renk &lt;ifade&gt;</code> : bir renk seçer şu an 13 tane renk var.</li>
+				
+				</ul>
+				<h2>Çember çiz  </h2>
+				<p><code>tekrarla 36 [dön 10 ileri 10]</code></p>
+				<h2>Spiral çiz </h2>
+				<p><code>kaydet a <span style='font-family:"Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif'>-</span>&gt; 10</code>
+				<code>t 10 [ t a [ dön 10 ileri a ] kaydet a <span style='font-family:"Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif'>-</span>&gt; a + 1 ]</code></p>
+				<h2>Beşgen çiz </h2>
+				<p><code>t 5 [dön 72 ileri 10 ]</code></p>
+				<h2>Beşgen beşgen üstüne </h2>
+				<p><code>kaydet a <span style='font-family:"Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif'>-</span>&gt; 10</code>
+				<code>t 7 [t 5[d 72 ileri a] kaydet a <span style='font-family:"Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif'>-</span>&gt; a + 10]</code></p>
+				<h2>1&#39; den 10&#39; a kadar olan sayıların yazımı</h2>
+				<p><code>kaydet a <span style='font-family:"Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif'>-</span>&gt; 1</code>
+				<code>t 10 [ yazdır a kaydet a <span style='font-family:"Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif'>-</span>&gt; a + 1]</code></p>
+				
+		</div>
 	</div>
 </div>
-	
+
 
 </body>
 	<script> 
