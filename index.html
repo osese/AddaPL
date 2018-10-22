@@ -5,13 +5,13 @@
 <script src="src/gramer/gramer.js"></script>
 
 
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.sound.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.sound.min.js"></script>
 
-<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<!-- <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="node_modules/p5/lib/p5.js"></script>
-<script src="node_modules/p5/lib/addons/p5.sound.js"></script>
+<script src="node_modules/p5/lib/addons/p5.sound.js"></script> -->
 
 <script src="src/js/term.js"> </script>
 <script src="src/js/graphics.js"> </script>
@@ -22,34 +22,34 @@
 </head>
 <body>
 
-<div id="main"> 
-	<div id="main-inner" class="block"> 
+<div id="main">
+	<div id="main-inner" class="block">
 		<div id="canvas-holder" >
 		</div>
 		<div id="term-holder">
-			
+
 			<div id="term-inner">
 				<textarea id="term" rows="1" class="block"></textarea>
-				<button class="block" id="calistirbtn">></button> 
-				<button class="block" id="temizlebtn">X</button> 
-			</div>   
+				<button class="block" id="calistirbtn">></button>
+				<button class="block" id="temizlebtn">X</button>
+			</div>
 			<div id="term-right">
-				
+
 			</div>
 		</div>
 		<div id="output">
 			<ul id="output-list">
-				
+
 			</ul>
 		</div>
 	</div>
 	<div id="main-right" class="block">
 		<div id="history">
-			<ul id="hist"> 
+			<ul id="hist">
 			</ul>
 		</div>
 		<div id="variable">
-			
+
 			<table id="variable-list">
 				<thead>
 					<th>Değişken Adı</th>
@@ -57,7 +57,7 @@
 				</thead>
 				<tbody>
 				</tbody>
-				
+
 			</table>
 		</div>
 	</div>
@@ -74,7 +74,7 @@
 				<li><code>ileri &lt;ifade&gt;</code>: ileriye doğru ifade kadar px gider.</li>
 				<li><code>tekrarla &lt;ifade&gt; &#39;[&#39; &lt;komutlar&gt; &#39;]&#39;</code> : komutları ifade kadar tekrarlar. </li>
 				<li><code>renk &lt;ifade&gt;</code> : bir renk seçer şu an 13 tane renk var.</li>
-				
+
 				</ul>
 				<h2>Çember çiz  </h2>
 				<p><code>tekrarla 36 [dön 10 ileri 10]</code></p>
@@ -89,16 +89,14 @@
 				<h2>1&#39; den 10&#39; a kadar olan sayıların yazımı</h2>
 				<p><code>kaydet a <span style='font-family:"Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif'>-</span>&gt; 1</code>
 				<code>t 10 [ yazdır a kaydet a <span style='font-family:"Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif'>-</span>&gt; a + 1]</code></p>
-				
+
 		</div>
 	</div>
 </div>
 
 
 </body>
-	<script> 
+	<script>
 		var term_ = new Terminal();
-	</script> 
+	</script>
 </html>
-
-
