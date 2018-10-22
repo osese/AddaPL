@@ -375,14 +375,19 @@ setpencolor: function(x){
 	x = Math.floor(x % Colors.length);
 
 	Kurbaga.setpencolor(Colors[x]);
+},
+loop: function(){
+	loop();
+},
+noloop : function(){
+	noloop();
 }
-
 };
 
 function setup(){
 	var W = 800;
 	var H = 600;
-	let canvas = createCanvas(W, H);	
+	let canvas = createCanvas(W, H, P2D);	
 	canvas.parent("canvas-holder");
 	Kurbaga.init();
 }

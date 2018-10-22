@@ -33,6 +33,7 @@
 "et"				  {return 'ET'; }
 "ekran\u0131temizle"  {return 'ET'; }
 "renk"				  {return 'RENK';}
+"yordam"			  {return 'YORDAM';}
 "->" 				  {return "ATAMA"}
 ":"					  {return ':'; }
 "*"                   {return '*';}
@@ -44,6 +45,8 @@
 ")"                   {return ')';}
 "[" 				  {return '[';}
 "]"					  {return ']';}
+","					  {return ',';}
+"="					  {return '=';}
 "$"               	  {return 'EOF';}
 [a-z][a-z0-9_]*		  {return 'ID'; }
 /lex
@@ -61,7 +64,7 @@
 
 
 
-program	    : komut EOF	  { interp($1); console.log($1); }
+program	    : komutlar EOF	  { interp(new Komut(komut_tipi.Program, $1, 0)); console.log($1); }
 			; 
 
 komut	    : TEKRAR e  '[' komutlar ']'  {$$ = new Komut(komut_tipi.TEKRAR, $2, $4); }
@@ -73,8 +76,20 @@ komut	    : TEKRAR e  '[' komutlar ']'  {$$ = new Komut(komut_tipi.TEKRAR, $2, $
 			| ET						  {$$ = new Komut(komut_tipi.ET, 0, 0); }
 			| YAZDIR e 					  {$$ = new Komut(komut_tipi.YAZDIR, $2, 0); }
 			| RENK e					  {$$ = new Komut(komut_tipi.RENK, $2, 0);}
+			| ID '(' exp_list ')'		  {$$ = new Komut(komut_tipi.FUNCCALL, $1, $3);}		
+			| YORDAM ID '(' id_list ')' ATAMA '[' komutlar ']'  { $$ = new Komut(komut_tipi.FUNC, $2, new Method($2, $4, $8));}
 			; 
 			
+exp_list: e ',' exp_list 			 {$$ = new ExpList($1, $3);}
+		| e 						 {$$ = new ExpList($1, undefined);}
+		|
+		;
+
+id_list : ID ',' id_list {$$ = new IdList($1, $3);}
+		| ID			 {$$ = new IdList($1, undefined);}
+		|
+		;
+
 komutlar 	: komut komutlar			  {$$ = new Komutlar($1, $2); }
 			| komut 				      {$$ = $1;}
 			; 

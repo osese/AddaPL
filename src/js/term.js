@@ -56,7 +56,7 @@ function Terminal() {
 		terminal.textarea.value = "";
 
 	});
-	
+
 	this.clearHist = function(){
 		$( ".pis" ).each(function(index) {
 			this.remove(); 	// remove all commands  
@@ -70,6 +70,7 @@ function Terminal() {
 			this.result("success");
 		}catch(e){
 			// bir hata oluştu 
+			console.log(e);
 			this.result("fail");
 		}
 	}
@@ -104,5 +105,27 @@ function Terminal() {
 
 	this.outputTemizle = function(){
 		$('$output-list').empty();
+	}
+
+	this.variableListeEkle = function(vari, val){
+		if($("#var-"+vari).length == 0){
+			var html = `<tr>
+				<td>${vari}</td>
+				<td id="var-${vari}">${val}</td>
+			</tr>`;
+			$('tbody').append(html)
+		}else{
+			$("#var-"+vari).text(val);
+		}
+		
+	}
+
+	this.variableListRefresh = function(){	
+		var ll = Object.getOwnPropertyNames(table);
+		$('tbody').empty();
+
+		ll.forEach(function(x){
+			$('tbody').append(x, table[x]);
+		})
 	}
 }

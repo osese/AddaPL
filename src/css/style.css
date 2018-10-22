@@ -132,10 +132,21 @@ code {
 	border: 1px solid black;
 }
 
-#variable-list{
+table th{
+	border: 1px solid black;
+}
+td {
+	border: 1px solid black;
+}
+#variable{
 	height: 400px;
 	box-shadow: 1px 1px 1px grey;
 	border: 1px solid black;
+	overflow-y: auto;
+
+}
+#variable-list{
+	overflow-y: scroll;
 }
 .pis{
 	display: block;

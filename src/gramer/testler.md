@@ -28,3 +28,8 @@
 `kaydet a -> 1`
 `t 10 [ yazdır a kaydet a -> a + 1]`
 
+## İlk 10 fibonacci sayısı
+`kaydet a -> 0` 
+`kaydet b -> 1 `
+`t 10 [ yazdır a kaydet x -> a kaydet a -> b kaydet b -> b + x]`
+
